@@ -21,6 +21,8 @@
 
 ### Patching the Raspberry Pi 3 WiFi interface
 
+**This will only work the Legacy Pi OS version!**
+
 Follow the README [here](https://github.com/seemoo-lab/nexmon/blob/master/README.md) for the Raspberry Pi 3
 
 ### Required APT Packages:
