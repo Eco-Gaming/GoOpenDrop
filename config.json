@@ -1,9 +1,9 @@
 {
     "inbox_folder":"INBOX",
     "outbox_folder":"OUTBOX",
-    "owl_wlan_dev_name":"wlan1",
+    "owl_wlan_dev_name":"mon0",
     "owl_channel_6_44_149":"6",
-    "os_downloadedfiles_owner":"khalefa",
+    "os_downloadedfiles_owner":"pi",
     "awdl_interface_name":"awdl0",
     "thumbnail_picture_jp2":"fixed_thumbnail.jp2",
     "ble_device":"hci0",
