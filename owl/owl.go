@@ -34,12 +34,13 @@ func StartOwlInterface(wlanDevName string, owlChannel string, OwlName string, lo
 	// return nil
 	KillOwl()
 
-	c := cmd.NewCmd("ip", "link", "set", "dev", wlanDevName, "down")
-	s := <-c.Start()
-	if s.Error != nil {
-		return s.Error
-	}
-	owlcmd := cmd.NewCmd("owl", "-i", wlanDevName, "-h", OwlName, "-c", owlChannel)
+	// c := cmd.NewCmd("ip", "link", "set", "dev", wlanDevName, "down")
+	// s := <-c.Start()
+	// if s.Error != nil {
+	// 	return s.Error
+	// }
+	// owlcmd := cmd.NewCmd("owl", "-i", wlanDevName, "-h", OwlName, "-c", owlChannel)
+	owlcmd := cmd.NewCmd("owl", "-i", wlanDevName, "-h", OwlName, "-N")
 	owlcmd.Stderr = nil
 	owlcmd.Stdout = nil
 
