@@ -19,6 +19,10 @@
 
 <br/>
 
+### Patching the Raspberry Pi 3 WiFi interface
+
+Follow the README [here](https://github.com/seemoo-lab/nexmon/blob/master/README.md) for the Raspberry Pi 3
+
 ### Required APT Packages:
 
 ###### These the packages required on a Debian based OS
@@ -62,26 +66,26 @@ If the instructions in the above repo don't work, try [this](https://github.com/
 
 At the moment, GoOpenDrop Just use a simple json file for configurations
 
-| parameter                   	| Type   	| Default                    	|                                                                                                           	|
-|-----------------------------	|--------	|----------------------------	|-----------------------------------------------------------------------------------------------------------	|
-| inbox_folder                	| string 	| INBOX                      	| This is the folder of the Received File from Mobile                                                       	|
-| outbox_folder               	| string 	| OUTBOX                     	| This is the Folder where GoOpenDrop will check for Sending Files to Mobile                                	|
-| owl_wlan_dev_name           	| string 	| wlan1                      	| Wlan Interface Name to used for Owl                                                                       	|
-| owl_channel_6_44_149        	| string 	| 6                          	| wlan Channel to used for Owl                                                                              	|
-| os_downloadedfiles_owner    	| string 	|                            	| Os Username to change received files owner to                                                             	|
-| awdl_interface_name         	| string 	| awdl0                      	| The Interface name to set Owl to                                                                          	|
-| thumbnail_picture_jp2       	| string 	| fixed_thumbnail.jp2        	| GoOpenDrop will use this file as thumbnail for /Ask requests, file should be of type JP2000, size 540x540 	|
-| ble_device                  	| string 	| hci0                       	|                                                                                                           	|
-| airdrop_appleid             	| string 	|                            	| The Apple ID Account used in Extracting Keys, this used even for broadcasting proper BLE Beacons          	|
-| airdrop_email               	| string 	|                            	| Can be Same as Apple ID                                                                                   	|
-| airdrop_phone               	| string 	|                            	| any number will do                                                                                        	|
-| airdrop_server_hostname     	| string 	| GoOpenDrop                 	| The device Name that will appear which mobile phone discover GoOpenDrop                                   	|
-| airdrop_server_model        	| string 	| MacbookPro5.1              	| No need to modify this                                                                                    	|
-| airdrop_server_port         	| int    	| 8772                       	| No need to modify this                                                                                    	|
-| apple_root_cert             	| string 	| certs/apple_root_ca.pem    	| Apple Root Certificate, already included in this repo                                                     	|
-| extracted_certififcate      	| string 	| keys/certificate.pem       	| Extracted Certificate                                                                                     	|
-| extracted_certkey           	| string 	| keys/key_noenc.pem         	| Extracted Certificate Key, after removing the encryption                                                  	|
-| extracted_validation_recoed 	| string 	| keys/validation_record.cms 	| Extracted Validation Record                                                                               	|
+| parameter                   | Type   | Default                    |                                                                                                           |
+| --------------------------- | ------ | -------------------------- | --------------------------------------------------------------------------------------------------------- |
+| inbox_folder                | string | INBOX                      | This is the folder of the Received File from Mobile                                                       |
+| outbox_folder               | string | OUTBOX                     | This is the Folder where GoOpenDrop will check for Sending Files to Mobile                                |
+| owl_wlan_dev_name           | string | mon0                       | Wlan Interface Name to used for Owl, set to mon0 for nexmon patched interfaces                            |
+| owl_channel_6_44_149        | string | 6                          | wlan Channel to used for Owl, currently always uses 6 no matter what u specify here                       |
+| os_downloadedfiles_owner    | string | pi                         | Os Username to change received files owner to                                                             |
+| awdl_interface_name         | string | awdl0                      | The Interface name to set Owl to                                                                          |
+| thumbnail_picture_jp2       | string | fixed_thumbnail.jp2        | GoOpenDrop will use this file as thumbnail for /Ask requests, file should be of type JP2000, size 540x540 |
+| ble_device                  | string | hci0                       | (The Raspberry Pi 3 bluetooth interface)                                                                  |
+| airdrop_appleid             | string |                            | The Apple ID Account used in Extracting Keys, this used even for broadcasting proper BLE Beacons          |
+| airdrop_email               | string |                            | Can be Same as Apple ID                                                                                   |
+| airdrop_phone               | string |                            | any number will do                                                                                        |
+| airdrop_server_hostname     | string | GoOpenDrop                 | The device Name that will appear which mobile phone discover GoOpenDrop                                   |
+| airdrop_server_model        | string | MacbookPro5.1              | No need to modify this                                                                                    |
+| airdrop_server_port         | int    | 8772                       | No need to modify this                                                                                    |
+| apple_root_cert             | string | certs/apple_root_ca.pem    | Apple Root Certificate, already included in this repo                                                     |
+| extracted_certififcate      | string | keys/certificate.pem       | Extracted Certificate                                                                                     |
+| extracted_certkey           | string | keys/key_noenc.pem         | Extracted Certificate Key, after removing the encryption                                                  |
+| extracted_validation_recoed | string | keys/validation_record.cms | Extracted Validation Record                                                                               |
 
 <br/>
 
@@ -117,6 +121,26 @@ to **out** folder
 
 ### Running
 
+Before running, nexmon has to be started:
+```
+sudo iw phy `iw dev wlan0 info | gawk '/wiphy/ {printf "phy" $2}'` interface add mon0 type monitor
+sudo ifconfig mon0 up
+sudo nexutil -k6
+```
+
+For some reason the firmware patch unapplies on reboot, to fix run this script (as root, eg. using `sudo su`) when starting the pi (also in `./scripts/firmware-patch-boot.sh`):
+```
+cd /home/pi/nexmon/
+source setup_env.sh
+cd /home/pi/nexmon/patches/bcm43430a1/7_45_41_46/nexmon/
+make install-firmware
+sleep 5s
+iw phy `iw dev wlan0 info | gawk '/wiphy/ {printf "phy" $2}'` interface add mon0 type monitor
+sleep 5s
+ifconfig mon0 up
+nexutil -k6
+```
+
 At the moment, since GoOpenDrop restart BLE interface, wlan interface, it requires to run as Root. 
 
 run GoOpenDrop compiled
@@ -131,18 +155,7 @@ sudo ./goopendrop ./config.json
 * since GoOpenDrop currently requires running as root, a client can use malicious device name, or malicious cpio archive and escape path or overwrite system files
 
 ### Tested Wifi Module :
-* Alfa AWUS036ACM
-* Linksys AE6000
+* Raspberry Pi 3 WiFi module (BCM43430A1), patched with [nexmon](https://github.com/seemoo-lab/nexmon/)
 
 ### Tested Hardware/os:
-* Any PC running Ubuntu 22.04 with bluetooth module and one of the listed wifi modules
-* Raspberry Pi 400/Raspberry Pi OS Lite
-
-### Compatible Wifi Modules
-For compatible Wifi Modules with Active Monitoring, check this awesome shortlist:
-
-https://github.com/morrownr/USB-WiFi/blob/main/home/The_Short_List.md
-
-I've only tested the ones listed above, other on the list should work as long as they have Active Monitoring
-
-I have not tested patched Wifi Module or running Owl with -n for nexamon patched interfaces
+* Raspberry Pi 3
