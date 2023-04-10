@@ -30,6 +30,48 @@ Follow the README [here](https://github.com/seemoo-lab/nexmon/blob/master/README
 sudo apt install libpcap0.8 libev4 bluez
 ```
 
+### Installing GO on Raspberry Pi (from this [guide](https://www.jeremymorgan.com/tutorials/raspberry-pi/install-go-raspberry-pi/))
+
+Raspberry Pi OS doesn't come with GO out of the box, so you will have to install it manually (the version on apt is too old):
+
+- go to the [GO download page](https://golang.org/dl/) and make note of the newest release for armv6l (currently this is `go1.20.3.linux-armv6l.tar.gz`)
+
+- use wget to download the archive:
+  ```
+  mkdir ~/src && cd ~/src
+  wget https://go.dev/dl/go1.20.3.linux-armv6l.tar.gz
+  ```
+
+- extract the package into your local folder:
+  ```
+  sudo tar -C /usr/local -xzf go1.20.3.linux-armv6l.tar.gz
+  ```
+
+- you can now delete the archive again:
+  ```
+  rm go1.20.3.linux-armv6l.tar.gz
+  ```
+
+- now you have to configure GO:
+	- open ~/.profile (using nano, vi, etc.)
+	  ```
+	  nano ~/.profile
+	  ```
+	- add the following at the bottom:
+	  ```
+	  PATH=$PATH:/usr/local/go/bin
+	  GOPATH=$HOME/go
+	  ```
+	- configure the shell with your changes:
+	  ```
+	  source ~/.profile
+	  ```
+
+- you can verify that the install worked by checking your GO version:
+  ```
+  go version
+  ```
+
 ### Required OWL Binaries:
 
 I've included seemoo-lab Compiled OWL Binaries, you can use it, or build it from source:
