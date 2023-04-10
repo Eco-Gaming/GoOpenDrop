@@ -113,7 +113,7 @@ At the moment, GoOpenDrop Just use a simple json file for configurations
 | inbox_folder                | string | INBOX                      | This is the folder of the Received File from Mobile                                                       |
 | outbox_folder               | string | OUTBOX                     | This is the Folder where GoOpenDrop will check for Sending Files to Mobile                                |
 | owl_wlan_dev_name           | string | mon0                       | Wlan Interface Name to used for Owl, set to mon0 for nexmon patched interfaces                            |
-| owl_channel_6_44_149        | string | 6                          | wlan Channel to used for Owl, currently always uses 6 no matter what u specify here                       |
+| owl_channel_6_44_149        | string | 6                          | wlan Channel to used for Owl, currently always uses 6 no matter what you specify here                       |
 | os_downloadedfiles_owner    | string | pi                         | Os Username to change received files owner to                                                             |
 | awdl_interface_name         | string | awdl0                      | The Interface name to set Owl to                                                                          |
 | thumbnail_picture_jp2       | string | fixed_thumbnail.jp2        | GoOpenDrop will use this file as thumbnail for /Ask requests, file should be of type JP2000, size 540x540 |
