@@ -50,6 +50,7 @@ Follow this repo for extraction:
 
 https://github.com/seemoo-lab/airdrop-keychain-extractor
 
+If the instructions in the above repo don't work, try [this](https://github.com/seemoo-lab/airdrop-keychain-extractor/issues/2#issuecomment-1501217586)
 
 ##### Example of a verified /Ask post Request:
 
