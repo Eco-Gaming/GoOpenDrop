@@ -5,6 +5,12 @@
 #### a Go Implementation and Enhancement of the Awesome Open Source AirDrop implementation work of seemoo-lab [openairdrop](https://github.com/seemoo-lab/opendrop)
 <br/>
 
+<hr>
+
+## This currently doesn't work properly and I don't know why!
+
+<hr>
+
 ### Features:
 
 ###### - Support Sending/Receiving Multiple Files. Photos/videos are sent as one request, and any other file of the same Apple UType will be sent together
